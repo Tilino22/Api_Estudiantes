@@ -32,15 +32,14 @@ Base = declarative_base()
 class EstudianteDB(Base):
     __tablename__ = "estudiantes"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nombre = Column(String, nullable=False)
     edad = Column(Integer, nullable=False)
     sexo = Column(String, nullable=False)
     correo = Column(String, nullable=False)
-    telefono = Column(String, nullable=False)
+    telefono = Column(Integer, nullable=False)
     direccion = Column(String, nullable=False)
     carrera = Column(String, nullable=False)
-    usuario_id = Column(Integer, nullable=True)
 
 Base.metadata.create_all(bind=engine)
 
@@ -59,7 +58,6 @@ def get_current_user(
     request: Request,
     api_key: str = Security(api_key_header)
 ):
-    # Bloquear si intentan enviar token por URL
     if "api_key" in request.query_params or "X-API-Key" in request.query_params:
         raise HTTPException(
             status_code=400,
@@ -129,7 +127,7 @@ def login(
     }
 
 # ==========================================================
-# CRUD ESTUDIANTES (ACTUALIZADO)
+# CRUD ESTUDIANTES (FORMULARIO)
 # ==========================================================
 
 @app.get("/estudiantes")
@@ -137,6 +135,10 @@ def listar_estudiantes(
     user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    return db.query(EstudianteDB).all()
+
+@app.get("/estudiantes-publicos")
+def listar_estudiantes_publicos(db: Session = Depends(get_db)):
     return db.query(EstudianteDB).all()
 
 @app.get("/estudiantes/{id}")
@@ -154,40 +156,33 @@ def obtener_estudiante(
 
 @app.post("/estudiantes")
 def crear_estudiante(
-    id: int = Form(...),
     nombre: str = Form(...),
     edad: int = Form(...),
     sexo: str = Form(...),
     correo: str = Form(...),
-    telefono: str = Form(...),
+    telefono: int = Form(...),
     direccion: str = Form(...),
     carrera: str = Form(...),
-    usuario_id: int = Form(None),
     user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    existente = db.query(EstudianteDB).filter(EstudianteDB.id == id).first()
-
-    if existente:
-        raise HTTPException(status_code=400, detail="ID ya existe")
-
     nuevo = EstudianteDB(
-        id=id,
         nombre=nombre,
         edad=edad,
         sexo=sexo,
         correo=correo,
         telefono=telefono,
         direccion=direccion,
-        carrera=carrera,
-        usuario_id=usuario_id
+        carrera=carrera
     )
 
     db.add(nuevo)
     db.commit()
+    db.refresh(nuevo)
 
     return {
         "mensaje": "Estudiante creado",
+        "id": nuevo.id,
         "creado_por": user["username"]
     }
 
@@ -198,10 +193,9 @@ def actualizar_estudiante(
     edad: int = Form(...),
     sexo: str = Form(...),
     correo: str = Form(...),
-    telefono: str = Form(...),
+    telefono: int = Form(...),
     direccion: str = Form(...),
     carrera: str = Form(...),
-    usuario_id: int = Form(None),
     user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -217,7 +211,6 @@ def actualizar_estudiante(
     estudiante.telefono = telefono
     estudiante.direccion = direccion
     estudiante.carrera = carrera
-    estudiante.usuario_id = usuario_id
 
     db.commit()
 
