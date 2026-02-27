@@ -20,6 +20,19 @@ API REST desarrollada con FastAPI para la gestión de estudiantes con:
 
 ---
 
+# Clonar el Repositorio
+
+Si deseas obtener el proyecto desde GitHub:
+
+```
+git clone https://github.com/Tilino22/Api_Estudiantes.git
+cd mi-api-xd
+```
+
+Asegúrate de estar dentro del directorio del proyecto antes de continuar.
+
+---
+
 # Estructura del Proyecto
 
 ```
@@ -137,6 +150,24 @@ X-API-Key: pk_xxxxxxxxx
 
 Verifica que la API esté funcionando.
 
+Disponible en:
+
+```
+http://localhost:8000
+```
+
+---
+
+## Documentación Swagger
+
+Disponible en:
+
+```
+http://localhost:8000/docs
+```
+
+Desde Swagger puedes probar todos los endpoints agregando el header `X-API-Key`.
+
 ---
 
 ## Protegidos
@@ -144,7 +175,6 @@ Verifica que la API esté funcionando.
 ### GET /estudiantes
 
 Lista todos los estudiantes.
-
 Requiere API Key válida.
 
 ---
@@ -176,7 +206,6 @@ Form-data requerido:
 ### PUT /estudiantes/{id}
 
 Actualiza estudiante existente.
-
 Mismos campos que creación.
 
 ---
@@ -184,7 +213,6 @@ Mismos campos que creación.
 ### DELETE /estudiantes/{id}
 
 Elimina estudiante.
-
 Requiere rol `admin`.
 
 ---
@@ -225,7 +253,7 @@ Servidor disponible en:
 http://localhost:8000
 ```
 
-Documentación Swagger:
+Documentación:
 
 ```
 http://localhost:8000/docs
@@ -275,6 +303,12 @@ Detener:
 docker compose down
 ```
 
+La aplicación estará disponible en:
+
+```
+http://localhost:8000
+```
+
 ---
 
 # Seguridad Implementada
@@ -296,9 +330,6 @@ Autenticación por API Key dinámica + base de datos SQLite real.
 
 # Desarrollador
 
-**Industria TilinosDevelopers S.A de C.V.**
-
-**Autor:** Tilino Developer Master
-
-
+Industria TilinosDevelopers S.A de C.V.
+Autor: Tilino Developer Master
 
