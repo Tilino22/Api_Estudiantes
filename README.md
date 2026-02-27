@@ -25,7 +25,7 @@ API REST desarrollada con FastAPI para la gestión de estudiantes con:
 Si deseas obtener el proyecto desde GitHub:
 
 ```
-git clone https://github.com/Tilino22/Api_Estudiantes.git
+git clone https://github.com/Tilino22/Api_Estudiantes
 cd mi-api-xd
 ```
 
